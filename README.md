@@ -58,7 +58,7 @@ python3 fetch_results.py --official
 - Odds are expected in fractional format like `30-1`.
 - `fetch_horses.py` includes scratched horses with `Odds=SCR` in `input_horses.csv`.
 - Scratched horses (`SCR`) are never assignable.
-- The assignment field is built from the first 20 assignable (non-`SCR`) horses by post number, then the script selects the 12 longest odds from that field.
+- The assignment pool is the first 20 assignable (non-`SCR`) horses by post number (or fewer if fewer are available), with no odds-based filtering.
 - Proof output is always shown in console as neat tables.
 - `fetch_results.py` is currently stubbed to use `input_race_results.csv`; if the file does not exist, a starter template is generated automatically.
 - `input_race_results.csv` is manual-entry friendly and only requires `Finished` and `Post`; `Horse` is auto-filled from `input_horses.csv`.
