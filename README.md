@@ -9,7 +9,7 @@ A small Python utility for assigning 12 fantasy football teams to the 12 longest
 - `fetch_results.py`: Fetches race results (stubbed via local CSV for now), maps them to fantasy teams, and builds final draft order.
 - `input_teams.csv`: Your team list (`Team,Owner,2025 Finish`) with exactly 12 teams.
 - `input_horses.csv`: Horse list (`Post,Horse,Odds`).
-- `input_race_results.csv`: Stub race results input (`Finished,Post`) used by `fetch_results.py` until a live source is added.
+- `input_race_results.csv`: Stub race results input (`Post`) used by `fetch_results.py` until a live source is added.
 - `results/team_horse_assignments.csv`: Official output assignments (written with `--official`).
 - `results/assignment_proof.txt`: Official proof report (written with `--official`).
 - `results/race_results.csv`: Official enriched race results with team mapping (written with `fetch_results.py --official`).
@@ -61,7 +61,7 @@ python3 fetch_results.py --official
 - The assignment pool is the first 20 assignable (non-`SCR`) horses by post number (or fewer if fewer are available), with no odds-based filtering.
 - Proof output is always shown in console as neat tables.
 - `fetch_results.py` is currently stubbed to use `input_race_results.csv`; if the file does not exist, a starter template is generated automatically.
-- `input_race_results.csv` is manual-entry friendly and only requires `Finished` and `Post`; `Horse` is auto-filled from `input_horses.csv`.
+- `input_race_results.csv` is manual-entry friendly and only requires `Post`; finish position is inferred from row order (`row 1 = 1st`, `row 2 = 2nd`, etc.), and `Horse` is auto-filled from `input_horses.csv`.
 - In the race results table, horses that were not assigned to fantasy teams will show blank `Owner` and `Team`.
 - Draft order is determined by finish position: best finish gets pick 1, worst assigned finish gets pick 12.
 - In preview mode (no `--official`), no files are written.

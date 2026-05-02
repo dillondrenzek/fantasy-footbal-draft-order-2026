@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 SCRATCHED_ODDS = "SCR"
-RESULTS_HEADERS = ["Finished", "Post"]
+RESULTS_HEADERS = ["Post"]
 ENRICHED_HEADERS = ["Finished", "Horse", "Post", "Owner", "Team"]
 DRAFT_HEADERS = ["Pick", "Owner", "Horse", "Finished"]
 
@@ -32,13 +32,6 @@ def write_csv_rows(path: Path, headers: List[str], rows: List[Dict[str, str]]) -
         writer = csv.DictWriter(f, fieldnames=headers)
         writer.writeheader()
         writer.writerows(rows)
-
-
-def parse_finished(value: str) -> int:
-    v = value.strip()
-    if not v.isdigit() or int(v) <= 0:
-        raise ValueError(f"Finished must be a positive integer. Found: {value!r}")
-    return int(v)
 
 
 def load_assignments(assignments_csv: Path) -> List[Dict[str, str]]:
@@ -82,9 +75,8 @@ def build_stub_race_results(horses_csv: Path, output_csv: Path, field_size: int 
             break
 
     rows: List[Dict[str, str]] = []
-    for idx, horse in enumerate(starters, start=1):
+    for horse in starters:
         rows.append({
-            "Finished": str(idx),
             "Post": horse["Post"].strip(),
         })
 
@@ -99,7 +91,7 @@ def fetch_results_stub(results_csv: Path, horses_csv: Path) -> Tuple[List[Dict[s
         if not rows:
             raise ValueError(f"Results CSV is empty: {results_csv}")
         if not set(RESULTS_HEADERS).issubset(rows[0].keys()):
-            raise ValueError("Results CSV must include columns: Finished,Post")
+            raise ValueError("Results CSV must include column: Post")
         return rows, False
 
     rows = build_stub_race_results(horses_csv, results_csv)
@@ -114,15 +106,17 @@ def enrich_results_with_assignments(
     by_post = {row["Post"].strip(): row for row in assignments}
 
     normalized: List[Dict[str, str]] = []
-    seen_finishes = set()
-    for row in race_results:
-        finished = str(parse_finished(row["Finished"]))
+    seen_posts = set()
+    for idx, row in enumerate(race_results, start=1):
+        finished = str(idx)
         post = row["Post"].strip()
         horse = horses_by_post.get(post, "")
 
-        if finished in seen_finishes:
-            raise ValueError(f"Duplicate finish position in results: {finished}")
-        seen_finishes.add(finished)
+        if not post:
+            raise ValueError(f"Post cannot be blank at results row {idx}.")
+        if post in seen_posts:
+            raise ValueError(f"Duplicate post in race results: {post}")
+        seen_posts.add(post)
         if not horse:
             raise ValueError(f"Post {post!r} in race results was not found in horses CSV.")
 
@@ -140,12 +134,11 @@ def enrich_results_with_assignments(
             }
         )
 
-    return sorted(normalized, key=lambda r: parse_finished(r["Finished"]))
+    return normalized
 
 
 def build_final_draft_order(enriched_results: List[Dict[str, str]]) -> List[Dict[str, str]]:
     assigned_finishers = [row for row in enriched_results if row["Owner"] and row["Team"]]
-    assigned_finishers = sorted(assigned_finishers, key=lambda r: parse_finished(r["Finished"]))
 
     draft_rows: List[Dict[str, str]] = []
     for pick, row in enumerate(assigned_finishers, start=1):
