@@ -1,0 +1,69 @@
+Fantasy Football Derby Draw Proof Report
+Generated (UTC): 2026-05-02T22:05:15.002898+00:00
+Horses CSV: input_horses.csv
+Teams CSV: input_teams.csv
+
+1) Eligible Horse Pool (No Odds Restriction)
+ 1. Post 1: Renegade (6-1)
+ 2. Post 2: Albus (44-1)
+ 3. Post 3: Intrepido (48-1)
+ 4. Post 4: Litmus Test (25-1)
+ 5. Post 6: Commandment (5-1)
+ 6. Post 7: Danon Bourbon (14-1)
+ 7. Post 8: So Happy (5-1)
+ 8. Post 10: Wonder Dean (25-1)
+ 9. Post 11: Incredibolt (25-1)
+10. Post 12: Chief Wallabee (7-1)
+11. Post 14: Potente (18-1)
+12. Post 15: Emerging Market (9-1)
+13. Post 16: Pavlovian (48-1)
+14. Post 17: Six Speed (35-1)
+15. Post 18: Further Ado (6-1)
+16. Post 19: Golden Tempo (25-1)
+17. Post 21: Great White (23-1)
+18. Post 22: Ocelli (76-1)
+19. Post 23: Robusta (75-1)
+
+2) Fantasy Teams (Draw Order)
+ 1. 2025 Finish=1 Pukkake - Jack
+ 2. 2025 Finish=2 Keeping up with the McCalferies - Kevin
+ 3. 2025 Finish=3 I am dead inside - Trevor
+ 4. 2025 Finish=4 One Big Beautiful Dill - Grant
+ 5. 2025 Finish=5 Big Brown Dak Makes em Waddle - Zach
+ 6. 2025 Finish=6 Thoughts And Players - Dillon
+ 7. 2025 Finish=7 2x Runner Up - Luke
+ 8. 2025 Finish=8 Dont spit just swallow - Wade
+ 9. 2025 Finish=9 Trick or Trick It's Mike Vick - Nate
+10. 2025 Finish=10 Dump it on my Chest - Henry
+11. 2025 Finish=11 IDPs Forever - Jono
+12. 2025 Finish=12 D***er my Sufficient Tight End - Shawnee
+
+3) Random Draw Log (Cryptographically Secure)
+Algorithm: for each team in input order, draw a random index from remaining horses.
+drawn is the 1-based position selected from the remaining horse pool.
+Step 1: pool_size=19, 2025 Finish=1, drawn=16 -> Pukkake assigned to Post 19 Golden Tempo (25-1)
+Step 2: pool_size=18, 2025 Finish=2, drawn=4 -> Keeping up with the McCalferies assigned to Post 4 Litmus Test (25-1)
+Step 3: pool_size=17, 2025 Finish=3, drawn=14 -> I am dead inside assigned to Post 18 Further Ado (6-1)
+Step 4: pool_size=16, 2025 Finish=4, drawn=1 -> One Big Beautiful Dill assigned to Post 1 Renegade (6-1)
+Step 5: pool_size=15, 2025 Finish=5, drawn=15 -> Big Brown Dak Makes em Waddle assigned to Post 23 Robusta (75-1)
+Step 6: pool_size=14, 2025 Finish=6, drawn=2 -> Thoughts And Players assigned to Post 3 Intrepido (48-1)
+Step 7: pool_size=13, 2025 Finish=7, drawn=4 -> 2x Runner Up assigned to Post 8 So Happy (5-1)
+Step 8: pool_size=12, 2025 Finish=8, drawn=10 -> Dont spit just swallow assigned to Post 17 Six Speed (35-1)
+Step 9: pool_size=11, 2025 Finish=9, drawn=10 -> Trick or Trick It's Mike Vick assigned to Post 21 Great White (23-1)
+Step 10: pool_size=10, 2025 Finish=10, drawn=3 -> Dump it on my Chest assigned to Post 7 Danon Bourbon (14-1)
+Step 11: pool_size=9, 2025 Finish=11, drawn=3 -> IDPs Forever assigned to Post 10 Wonder Dean (25-1)
+Step 12: pool_size=8, 2025 Finish=12, drawn=2 -> D***er my Sufficient Tight End assigned to Post 6 Commandment (5-1)
+
+4) Final Assignments
+ 1. 2025 Finish=1 Pukkake - Jack -> Post 19 Golden Tempo (25-1)
+ 2. 2025 Finish=2 Keeping up with the McCalferies - Kevin -> Post 4 Litmus Test (25-1)
+ 3. 2025 Finish=3 I am dead inside - Trevor -> Post 18 Further Ado (6-1)
+ 4. 2025 Finish=4 One Big Beautiful Dill - Grant -> Post 1 Renegade (6-1)
+ 5. 2025 Finish=5 Big Brown Dak Makes em Waddle - Zach -> Post 23 Robusta (75-1)
+ 6. 2025 Finish=6 Thoughts And Players - Dillon -> Post 3 Intrepido (48-1)
+ 7. 2025 Finish=7 2x Runner Up - Luke -> Post 8 So Happy (5-1)
+ 8. 2025 Finish=8 Dont spit just swallow - Wade -> Post 17 Six Speed (35-1)
+ 9. 2025 Finish=9 Trick or Trick It's Mike Vick - Nate -> Post 21 Great White (23-1)
+10. 2025 Finish=10 Dump it on my Chest - Henry -> Post 7 Danon Bourbon (14-1)
+11. 2025 Finish=11 IDPs Forever - Jono -> Post 10 Wonder Dean (25-1)
+12. 2025 Finish=12 D***er my Sufficient Tight End - Shawnee -> Post 6 Commandment (5-1)

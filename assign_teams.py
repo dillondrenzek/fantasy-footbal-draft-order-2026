@@ -44,7 +44,7 @@ def read_horses(input_csv: Path) -> List[Dict[str, str]]:
     return rows
 
 
-def select_longest_shots(horses: List[Dict[str, str]], count: int = 12) -> List[Dict[str, str]]:
+def select_horse_pool(horses: List[Dict[str, str]], field_size: int = 20) -> List[Dict[str, str]]:
     # Derby field cap: first 20 assignable (non-SCR) horses by post number.
     horses_by_post = sorted(horses, key=lambda row: int(row["Post"]))
     assignable_field: List[Dict[str, str]] = []
@@ -52,20 +52,15 @@ def select_longest_shots(horses: List[Dict[str, str]], count: int = 12) -> List[
         if is_scratched(horse["Odds"]):
             continue
         assignable_field.append(horse)
-        if len(assignable_field) == 20:
+        if len(assignable_field) == field_size:
             break
 
-    if len(assignable_field) < count:
+    if len(assignable_field) < 12:
         raise ValueError(
-            f"Need at least {count} assignable horses. Found {len(assignable_field)} non-SCR horses."
+            f"Need at least 12 assignable horses. Found {len(assignable_field)} non-SCR horses."
         )
 
-    # Higher X in X-1 means longer odds (lower implied chance).
-    return sorted(
-        assignable_field,
-        key=lambda row: parse_fractional_odds(row["Odds"])[0] / parse_fractional_odds(row["Odds"])[1],
-        reverse=True,
-    )[:count]
+    return assignable_field
 
 
 def read_teams(input_csv: Path) -> List[Dict[str, str]]:
@@ -103,8 +98,10 @@ def read_teams(input_csv: Path) -> List[Dict[str, str]]:
 def assign_teams_to_horses(
     teams: List[Dict[str, str]], horses: List[Dict[str, str]]
 ) -> Tuple[List[Dict[str, str]], List[Dict[str, str]]]:
-    if len(teams) != 12 or len(horses) != 12:
-        raise ValueError("Exactly 12 teams and 12 horses are required.")
+    if len(teams) != 12:
+        raise ValueError("Exactly 12 teams are required.")
+    if len(horses) < 12:
+        raise ValueError("At least 12 horses are required.")
 
     rng = secrets.SystemRandom()
     remaining_horses = horses[:]
@@ -175,7 +172,7 @@ def print_table(title: str, headers: List[str], rows: List[List[str]]) -> None:
 def print_proof_to_console(
     input_horses_csv: Path,
     input_teams_csv: Path,
-    selected_horses: List[Dict[str, str]],
+    horse_pool: List[Dict[str, str]],
     teams: List[Dict[str, str]],
     draw_log: List[Dict[str, str]],
     assignments: List[Dict[str, str]],
@@ -187,8 +184,8 @@ def print_proof_to_console(
     print(f"Teams CSV: {input_teams_csv}")
     print()
 
-    horses_rows = [[h["Post"], h["Horse"], h["Odds"]] for h in selected_horses]
-    print_table("1) Selected 12 Longest-Odds Horses", ["Post", "Horse", "Odds"], horses_rows)
+    horses_rows = [[h["Post"], h["Horse"], h["Odds"]] for h in horse_pool]
+    print_table("1) Eligible Horse Pool (No Odds Restriction)", ["Post", "Horse", "Odds"], horses_rows)
 
     teams_rows = [[t[FINISH_COL].strip(), t["Team"].strip(), t["Owner"].strip()] for t in teams]
     print_table("2) Fantasy Teams (Draw Order)", [FINISH_COL, "Team", "Owner"], teams_rows)
@@ -225,7 +222,7 @@ def write_proof_report(
     proof_path: Path,
     input_horses_csv: Path,
     input_teams_csv: Path,
-    selected_horses: List[Dict[str, str]],
+    horse_pool: List[Dict[str, str]],
     teams: List[Dict[str, str]],
     draw_log: List[Dict[str, str]],
     assignments: List[Dict[str, str]],
@@ -237,8 +234,8 @@ def write_proof_report(
     lines.append(f"Horses CSV: {input_horses_csv}")
     lines.append(f"Teams CSV: {input_teams_csv}")
     lines.append("")
-    lines.append("1) Selected 12 Longest-Odds Horses")
-    for i, horse in enumerate(selected_horses, start=1):
+    lines.append("1) Eligible Horse Pool (No Odds Restriction)")
+    for i, horse in enumerate(horse_pool, start=1):
         lines.append(f"{i:>2}. Post {horse['Post']}: {horse['Horse']} ({horse['Odds']})")
     lines.append("")
     lines.append("2) Fantasy Teams (Draw Order)")
@@ -315,13 +312,13 @@ def main() -> int:
 
         teams = read_teams(Path(args.teams_csv))
         horses = read_horses(input_csv)
-        selected_horses = select_longest_shots(horses, 12)
-        assignments, draw_log = assign_teams_to_horses(teams, selected_horses)
+        horse_pool = select_horse_pool(horses, 20)
+        assignments, draw_log = assign_teams_to_horses(teams, horse_pool)
 
         print_proof_to_console(
             input_csv,
             Path(args.teams_csv),
-            selected_horses,
+            horse_pool,
             teams,
             draw_log,
             assignments,
@@ -337,7 +334,7 @@ def main() -> int:
                 official_proof,
                 input_csv,
                 Path(args.teams_csv),
-                selected_horses,
+                horse_pool,
                 teams,
                 draw_log,
                 assignments,
